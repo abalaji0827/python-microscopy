@@ -27,14 +27,14 @@ import pyvisa
 
 
 class SiglentSDG(object):
-    def __init__(self, resource=None, channel=1, name='SDG', high_z=True, min_voltage=None, max_voltage=None):
+    def __init__(self, resource, channel=1, name='SDG', high_z=True, min_voltage=None, max_voltage=None):
         """
 
         Parameters
         ----------
         resource: str
             VISA resource string, e.g. 'USB0::0xF4EC::0x1102::SDG2XFBCA00334::INSTR' or
-            'TCPIP0::192.168.10.2::INSTR'. If None, the first Siglent USB device found is used.
+            'TCPIP0::192.168.10.2::INSTR'. To find it, run ``pyvisa.ResourceManager().list_resources()`` with the generator connected.
         channel: int
             Output channel to control (1 or 2)
         name: str
@@ -56,11 +56,6 @@ class SiglentSDG(object):
         self.max_voltage = max_voltage
 
         rm = pyvisa.ResourceManager()
-        if resource is None:
-            siglent_usb = [r for r in rm.list_resources() if r.upper().startswith('USB') and '0XF4EC' in r.upper()]
-            if len(siglent_usb) == 0:
-                raise RuntimeError('No Siglent USB device found')
-            resource = siglent_usb[0]
 
         self.instr = rm.open_resource(resource)
         self.instr.write_termination = '\n'
@@ -120,7 +115,7 @@ class SiglentSDG(object):
         """
         self.write('C%d:BSWV WVTP,%s' % (self.channel, waveform.upper()))
         self._read_settings()
-    
+        
     def _check_voltages(self, high, low):
         """
         Raise an error if an output between low and high volts would be outside the allowed range.
