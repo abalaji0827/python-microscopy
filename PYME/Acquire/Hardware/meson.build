@@ -139,6 +139,13 @@ py_sources = [
 ]
 py.install_sources(py_sources, subdir:'PYME/Acquire/Hardware/Pico')
 
+# Siglent
+py_sources = [
+    'Siglent/SiglentSDG.py',
+    'Siglent/__init__.py',
+]
+py.install_sources(py_sources, subdir:'PYME/Acquire/Hardware/Siglent')
+
 # GCS
 py_sources = files(
     'GCS/GCS_DLL.py',
