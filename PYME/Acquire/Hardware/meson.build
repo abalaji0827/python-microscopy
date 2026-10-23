@@ -132,6 +132,13 @@ py_sources = files(
 )
 py.install_sources(py_sources, subdir:'PYME/Acquire/Hardware/Coherent')
 
+# Pico
+py_sources = [
+    'Pico/picoscope.py',
+    'Pico/__init__.py',
+]
+py.install_sources(py_sources, subdir:'PYME/Acquire/Hardware/Pico')
+
 # GCS
 py_sources = files(
     'GCS/GCS_DLL.py',
